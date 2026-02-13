@@ -7,65 +7,58 @@
     
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="Horizonte">
-    
     <script src="https://cdn.tailwindcss.com"></script>
+    
     <style>
-        /* Evita el scroll elástico y toques accidentales */
         body {
             overscroll-behavior: none;
             -webkit-tap-highlight-color: transparent;
+        }
+        /* Efecto de pulsación suave para iPhone */
+        .btn-interactivo:active {
+            transform: scale(0.96);
+            filter: brightness(1.1);
         }
     </style>
 </head>
 <body class="bg-slate-950 flex flex-col justify-center min-h-screen px-6">
 
-    <div class="fixed top-0 left-0 w-full h-full overflow-hidden pointer-events-none -z-10">
-        <div class="absolute top-[-10%] left-[-10%] w-[50%] h-[30%] bg-blue-600/20 blur-[120px] rounded-full"></div>
-        <div class="absolute bottom-[-10%] right-[-10%] w-[50%] h-[30%] bg-slate-600/10 blur-[120px] rounded-full"></div>
-    </div>
-
     <div class="text-center mb-12">
-        <h1 class="text-white text-4xl font-black italic tracking-tighter">
-            HORIZONTE
-        </h1>
+        <h1 class="text-white text-4xl font-black italic tracking-tighter">HORIZONTE</h1>
         <div class="h-1 w-12 bg-blue-600 mx-auto mt-2 rounded-full"></div>
-        <p class="text-slate-500 font-bold text-[10px] uppercase tracking-[0.3em] mt-4">
-            Sistema de Gestión Centralizado
-        </p>
     </div>
 
     <div class="space-y-6">
         <a href="app_turismo.html" 
-           class="block bg-blue-600 p-8 rounded-[2.5rem] shadow-[0_20px_50px_rgba(37,99,235,0.3)] active:scale-95 transition-all duration-300">
+           class="btn-interactivo block bg-slate-900 border border-slate-800 p-8 rounded-[2.5rem] shadow-xl transition-all duration-200 hover:bg-blue-600 hover:border-blue-500 group">
             <div class="flex items-center gap-6">
-                <div class="bg-white/20 w-16 h-16 rounded-2xl flex items-center justify-center text-4xl shadow-inner">
+                <div class="bg-slate-800 group-hover:bg-blue-500 w-16 h-16 rounded-2xl flex items-center justify-center text-4xl transition-colors">
                     🌴
                 </div>
                 <div class="text-left">
-                    <p class="text-white font-black text-xl uppercase leading-tight tracking-tight">Servicios de<br>Turismo</p>
-                    <p class="text-blue-200 text-[10px] font-bold mt-1 uppercase">Control por Viaje</p>
+                    <p class="text-slate-400 group-hover:text-white font-black text-xl uppercase leading-tight transition-colors">Servicios de<br>Turismo</p>
+                    <p class="text-slate-600 group-hover:text-blue-200 text-[10px] font-bold mt-1 uppercase transition-colors">Abrir Aplicación</p>
                 </div>
             </div>
         </a>
 
         <a href="app_contratos.html" 
-           class="block bg-slate-800/50 backdrop-blur-md p-8 rounded-[2.5rem] shadow-xl active:scale-95 transition-all duration-300 border border-slate-700">
+           class="btn-interactivo block bg-slate-900 border border-slate-800 p-8 rounded-[2.5rem] shadow-xl transition-all duration-200 hover:bg-slate-800 hover:border-slate-700 group">
             <div class="flex items-center gap-6">
-                <div class="bg-slate-700 w-16 h-16 rounded-2xl flex items-center justify-center text-4xl shadow-inner">
+                <div class="bg-slate-800 group-hover:bg-slate-700 w-16 h-16 rounded-2xl flex items-center justify-center text-4xl transition-colors">
                     🏢
                 </div>
                 <div class="text-left">
-                    <p class="text-white font-black text-xl uppercase leading-tight tracking-tight">Contratos<br>Mensuales</p>
-                    <p class="text-slate-500 text-[10px] font-bold mt-1 uppercase">Gestión de Contratos</p>
+                    <p class="text-slate-400 group-hover:text-white font-black text-xl uppercase leading-tight transition-colors">Contratos<br>Mensuales</p>
+                    <p class="text-slate-600 group-hover:text-slate-400 text-[10px] font-bold mt-1 uppercase transition-colors">Abrir Aplicación</p>
                 </div>
             </div>
         </a>
     </div>
 
     <div class="mt-16 text-center">
-        <p class="text-slate-700 text-[10px] font-bold uppercase tracking-widest">
-            © 2026 Horizonte S.A.
+        <p class="text-slate-800 text-[10px] font-bold uppercase tracking-widest italic">
+            Seleccione una unidad de negocio
         </p>
     </div>
 
