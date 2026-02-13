@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Horizonte Hub</title>
+    
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Horizonte">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Evita el scroll elástico y toques accidentales */
+        body {
+            overscroll-behavior: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+    </style>
+</head>
+<body class="bg-slate-950 flex flex-col justify-center min-h-screen px-6">
+
+    <div class="fixed top-0 left-0 w-full h-full overflow-hidden pointer-events-none -z-10">
+        <div class="absolute top-[-10%] left-[-10%] w-[50%] h-[30%] bg-blue-600/20 blur-[120px] rounded-full"></div>
+        <div class="absolute bottom-[-10%] right-[-10%] w-[50%] h-[30%] bg-slate-600/10 blur-[120px] rounded-full"></div>
+    </div>
+
+    <div class="text-center mb-12">
+        <h1 class="text-white text-4xl font-black italic tracking-tighter">
+            HORIZONTE
+        </h1>
+        <div class="h-1 w-12 bg-blue-600 mx-auto mt-2 rounded-full"></div>
+        <p class="text-slate-500 font-bold text-[10px] uppercase tracking-[0.3em] mt-4">
+            Sistema de Gestión Centralizado
+        </p>
+    </div>
+
+    <div class="space-y-6">
+        <a href="app_turismo.html" 
+           class="block bg-blue-600 p-8 rounded-[2.5rem] shadow-[0_20px_50px_rgba(37,99,235,0.3)] active:scale-95 transition-all duration-300">
+            <div class="flex items-center gap-6">
+                <div class="bg-white/20 w-16 h-16 rounded-2xl flex items-center justify-center text-4xl shadow-inner">
+                    🌴
+                </div>
+                <div class="text-left">
+                    <p class="text-white font-black text-xl uppercase leading-tight tracking-tight">Servicios de<br>Turismo</p>
+                    <p class="text-blue-200 text-[10px] font-bold mt-1 uppercase">Control por Viaje</p>
+                </div>
+            </div>
+        </a>
+
+        <a href="app_contratos.html" 
+           class="block bg-slate-800/50 backdrop-blur-md p-8 rounded-[2.5rem] shadow-xl active:scale-95 transition-all duration-300 border border-slate-700">
+            <div class="flex items-center gap-6">
+                <div class="bg-slate-700 w-16 h-16 rounded-2xl flex items-center justify-center text-4xl shadow-inner">
+                    🏢
+                </div>
+                <div class="text-left">
+                    <p class="text-white font-black text-xl uppercase leading-tight tracking-tight">Contratos<br>Mensuales</p>
+                    <p class="text-slate-500 text-[10px] font-bold mt-1 uppercase">Gestión de Unidades</p>
+                </div>
+            </div>
+        </a>
+    </div>
+
+    <div class="mt-16 text-center">
+        <p class="text-slate-700 text-[10px] font-bold uppercase tracking-widest">
+            © 2026 Horizonte S.A.
+        </p>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,46 @@
+/* Estilo para ocultar secciones */
+.hidden {
+  display: none !important;
+}
+
+/* Animación para que el modal suba suavemente */
+@keyframes slide-up {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+
+.animate-slide-up {
+  animation: slide-up 0.4s ease-out;
+}
+
+/* Evitar que el scroll se vea feo en iPhone */
+body {
+  -webkit-tap-highlight-color: transparent;
+  overscroll-behavior-y: contain;
+}
+/* Estilo para ocultar secciones */
+.hidden {
+  display: none !important;
+}
+
+/* Evitar que el scroll se vea feo en iPhone */
+body {
+  -webkit-tap-highlight-color: transparent;
+  overscroll-behavior-y: contain;
+  padding-bottom: 100px; /* Espacio para que el contenido no quede debajo de la barra */
+}
+
+/* Transición suave al cambiar de pestaña */
+section {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Estilo para el botón activo (opcional) */
+.nav-active {
+  color: #2563eb !important; /* Azul de Tailwind */
+}
