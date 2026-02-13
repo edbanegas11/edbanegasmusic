@@ -652,6 +652,10 @@ window.exportData = () => {
     a.download = 'reporte.csv';
     a.click();
 };
+window.addEventListener('beforeunload', () => {
+    document.body.style.opacity = '0';
+    document.body.style.transition = 'opacity 0.3s ease';
+});
 
 // --- 7. LISTENERS TIEMPO REAL ---
 const q = query(collection(db, 'usuarios', USER_ID, 'movimientos'), orderBy('createdAt', 'desc'));
