@@ -25,7 +25,6 @@ const firebaseConfig = {
   measurementId: "G-HCF57HSFG5"
 };
 
-// Inicialización
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const USER_ID = "admin_horizonte";
@@ -37,23 +36,48 @@ let unidadesConfig = ['Hyundai County', 'Toyota Hiace'];
 let catEgresos = ['Combustible', 'Sueldos y Viáticos', 'Repuestos', 'Mantenimiento', 'Gastos de Operaciones'];
 
 // Abrir el modal con los datos actuales
-window.editTransaction = (id, amount, category, unit, type) => {
-    const modal = document.getElementById('modal-edit');
-    document.getElementById('edit-id').value = id;
-    document.getElementById('edit-amount').value = amount;
-    
-    // Llenar select de unidades del modal
-    const editUnitSel = document.getElementById('edit-unit');
-    editUnitSel.innerHTML = unidadesConfig.map(u => `<option value="${u}" ${u === unit ? 'selected' : ''}>${u}</option>`).join('');
+window.editTransaction = (id) => {
+    // Buscamos la transacción en nuestro array local
+    const t = localTransactions.find(item => item.id === id);
+    if (!t) return;
 
-    // Preparar el campo de categoría (Select para gastos, Textarea para ingresos)
+    const modal = document.getElementById('modal-edit');
+    const amountInput = document.getElementById('edit-amount');
+    const unitSelect = document.getElementById('edit-unit');
     const catContainer = document.getElementById('edit-cat-container');
-    if (type === 'expense') {
-        catContainer.innerHTML = `<select id="edit-category" class="w-full p-4 bg-slate-50 rounded-2xl font-bold text-sm outline-none">
-            ${catEgresos.map(c => `<option value="${c}" ${c === category ? 'selected' : ''}>${c}</option>`).join('')}
-        </select>`;
+    const title = document.getElementById('edit-title');
+
+    // 1. Asignar ID y Monto
+    document.getElementById('edit-id').value = id;
+    amountInput.value = t.amount;
+    
+    // 2. Ajustar Título y Color del Monto según el tipo
+    if (t.type === 'income') {
+        title.innerText = "Editar Ingreso";
+        title.className = "text-lg font-black text-green-600 uppercase italic";
+        amountInput.className = "w-full p-4 bg-slate-50 rounded-2xl font-black text-xl outline-none text-green-600";
     } else {
-        catContainer.innerHTML = `<textarea id="edit-category" class="w-full p-4 bg-slate-50 rounded-2xl text-sm h-24 outline-none">${category}</textarea>`;
+        title.innerText = "Editar Gasto";
+        title.className = "text-lg font-black text-red-600 uppercase italic";
+        amountInput.className = "w-full p-4 bg-slate-50 rounded-2xl font-black text-xl outline-none text-red-600";
+    }
+
+    // 3. Llenar Select de Unidades
+    unitSelect.innerHTML = unidadesConfig.map(u => 
+        `<option value="${u}" ${u === t.unit ? 'selected' : ''}>${u}</option>`
+    ).join('');
+
+    // 4. Inyectar el campo dinámico en el contenedor que dejaste en tu HTML
+    if (t.type === 'expense') {
+        // SELECT para Gastos
+        catContainer.innerHTML = `
+            <select id="edit-category" class="w-full p-4 bg-slate-50 rounded-2xl font-bold text-sm outline-none">
+                ${catEgresos.map(c => `<option value="${c}" ${c === t.category ? 'selected' : ''}>${c}</option>`).join('')}
+            </select>`;
+    } else {
+        // TEXTAREA para Ingresos
+        catContainer.innerHTML = `
+            <textarea id="edit-category" class="w-full p-4 bg-slate-50 rounded-2xl text-sm font-bold h-24 outline-none placeholder-slate-300">${t.category || ''}</textarea>`;
     }
 
     modal.classList.remove('hidden');
@@ -63,7 +87,24 @@ window.editTransaction = (id, amount, category, unit, type) => {
 window.closeEditModal = () => {
     document.getElementById('modal-edit').classList.add('hidden');
 };
-
+// --- ELIMINAR TRANSACCIÓN ---
+window.deleteTransaction = async (id) => {
+    // Confirmación de seguridad
+    if (confirm("¿Estás seguro de que deseas eliminar este movimiento? Esta acción no se puede deshacer.")) {
+        try {
+            // Referencia al documento específico
+            const docRef = doc(db, 'usuarios', USER_ID, 'movimientos', id);
+            
+            // Ejecutar eliminación en Firebase
+            await deleteDoc(docRef);
+            
+            
+        } catch (e) {
+            console.error("Error al eliminar:", e);
+            alert("No se pudo eliminar el registro: " + e.message);
+        }
+    }
+};
 // Guardar los cambios en Firebase
 window.updateTransactionFirebase = async () => {
     const id = document.getElementById('edit-id').value;
@@ -71,10 +112,11 @@ window.updateTransactionFirebase = async () => {
     const unit = document.getElementById('edit-unit').value;
     const category = document.getElementById('edit-category').value;
 
-    if (!amount || !category) return alert("Completa todos los campos");
+    if (!amount || !category) return alert("Por favor, completa todos los campos.");
 
     try {
         const docRef = doc(db, 'usuarios', USER_ID, 'movimientos', id);
+        
         await updateDoc(docRef, {
             amount: parseFloat(amount),
             unit: unit,
@@ -82,8 +124,10 @@ window.updateTransactionFirebase = async () => {
         });
         
         closeEditModal();
-        alert("¡Actualizado con éxito! ✅");
+       
+        
     } catch (e) {
+        console.error("Error al actualizar:", e);
         alert("Error al guardar cambios: " + e.message);
     }
 };
@@ -169,6 +213,7 @@ window.setReportSubView = (type) => {
     
     renderHistory();
 };
+
 // --- 2. RENDERIZADO DEL DASHBOARD (INICIO) ---
 // --- RENDERIZADO DEL DASHBOARD ACTUALIZADO ---
 function renderDashboard() {
@@ -404,24 +449,6 @@ if (catList) {
         </div>`).join('');
     }
 }
-// --- ELIMINAR TRANSACCIÓN ---
-window.deleteTransaction = async (id) => {
-    // Confirmación de seguridad
-    if (confirm("¿Estás seguro de que deseas eliminar este movimiento? Esta acción no se puede deshacer.")) {
-        try {
-            // Referencia al documento específico
-            const docRef = doc(db, 'usuarios', USER_ID, 'movimientos', id);
-            
-            // Ejecutar eliminación en Firebase
-            await deleteDoc(docRef);
-            
-            alert("Movimiento eliminado correctamente. 🗑️");
-        } catch (e) {
-            console.error("Error al eliminar:", e);
-            alert("No se pudo eliminar el registro: " + e.message);
-        }
-    }
-};
 // --- RENDERIZAR DISTRIBUCIÓN DE GASTOS (BARRAS) ---
 window.renderReportBreakdown = () => {
     const container = document.getElementById('lista-breakdown');
@@ -520,17 +547,15 @@ window.deleteCat = async (index) => {
     }
 };
 async function saveConfig() {
-    // Referencia al documento 'preferencias' dentro de la subcolección 'config'
     const configRef = doc(db, 'usuarios', USER_ID, 'config', 'preferencias');
     try {
         await setDoc(configRef, { 
             unidades: unidadesConfig, 
             catEgresos: catEgresos 
         });
-        console.log("Configuración guardada en la nube");
     } catch (e) {
         console.error("Error al guardar configuración:", e);
-        alert("No se pudo guardar en la nube. Revisa los permisos de Firestore.");
+        alert("No se pudo guardar en la nube.");
     }
 }
 // --- 5. ACCIONES DE FIREBASE ---
@@ -560,7 +585,7 @@ window.saveIncome = async () => {
         
         if (elDetails) elDetails.value = ''; // ¡Limpiamos los detalles!
 
-        alert("Ingreso guardado con éxito");
+        
         
         // Refrescamos los datos locales para que el desglose sea real
         if (typeof fetchTransactions === 'function') {
@@ -629,7 +654,7 @@ window.saveMultipleExpenses = async () => {
             await addDoc(collection(db, 'usuarios', USER_ID, 'movimientos'), gasto);
         }
         
-        alert("Gastos registrados!");
+        
         showView('dashboard');
     } catch (e) {
         alert("Error: " + e.message);
@@ -667,15 +692,9 @@ window.exportData = () => {
     a.download = 'reporte.csv';
     a.click();
 };
-window.addEventListener('beforeunload', () => {
-    document.body.style.opacity = '0';
-    document.body.style.transition = 'opacity 0.3s ease';
-});
+
 // --- 7. LISTENERS TIEMPO REAL ---
-const q = query(
-    collection(db, 'usuarios', USER_ID, 'movimientos'), 
-    orderBy('createdAt', 'desc')
-);
+const q = query(collection(db, 'usuarios', USER_ID, 'movimientos'), orderBy('createdAt', 'desc'));
 
 onSnapshot(q, (snapshot) => {
     localTransactions = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
