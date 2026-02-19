@@ -3,25 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
-   
-
-    <link rel="manifest" href="manifest.json">
-
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="STL Horizonte">
-
-<link rel="apple-touch-icon" href="logo.png">
-
-<script>
-  if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-      navigator.serviceWorker.register('sw.js')
-        .then(reg => console.log('SW registrado'))
-        .catch(err => console.log('Error SW', err));
-    });
-  }
-</script>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   
     <title>STL HORIZONTE</title>
     <script src="https://cdn.tailwindcss.com"></script>
@@ -29,7 +12,7 @@
 <body class="bg-slate-50">
     
 <a href="index.html" 
-       class="fixed top-20 left-6 z-[100] bg-slate-800/90 backdrop-blur-md p-3 rounded-2xl shadow-2xl border border-slate-700 active:scale-90 transition-transform flex items-center gap-2">
+       class="fixed top-1 left-6 z-[100] bg-slate-800/90 backdrop-blur-md p-3 rounded-2xl shadow-2xl border border-slate-700 active:scale-90 transition-transform flex items-center gap-2">
         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
             <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
             <polyline points="9 22 9 12 15 12 15 22"/>
@@ -39,8 +22,8 @@
   
   
     <div id="app" class="max-w-md mx-auto pb-32">
-        <header class="bg-slate-900 text-white pt-14 pb-10 px-8 rounded-b-[3rem] shadow-xl">
-    <h1 class="font-black italic text-xl text-right uppercase">Servicios de Turismo "Horizonte"</h1>
+        <header class="bg-slate-900 text-white p-8 rounded-b-[3rem] shadow-xl">
+            <h1 class="font-black italic text-xl">SERVICIOS DE TURISMO "HORIZONTE"</h1>
             <div class="text-center mt-4">
                 <p class="text-[10px] uppercase text-slate-500">Balance de Caja</p>
                 <h2 id="balance-total" class="text-4xl font-black">L 0.00</h2>
@@ -75,16 +58,20 @@
 </section>
 
             <section id="view-income" class="hidden bg-white p-8 rounded-[3rem] shadow-2xl space-y-6">
-                <h2 class="text-lg font-black text-green-600 uppercase italic">Nuevo Ingreso</h2>
-                <div class="space-y-4">
-                    <input type="number" id="in-amount" class="w-full p-4 bg-slate-50 rounded-2xl font-black text-xl outline-none" placeholder="Monto Lps">
-                    <select id="in-unit" class="w-full p-4 bg-slate-50 rounded-2xl font-bold text-sm outline-none">
-                        </select>
-                    <textarea id="in-detail" class="w-full p-4 bg-slate-50 rounded-2xl text-sm h-24 outline-none" placeholder="Detalle del viaje..."></textarea>
-                    <button onclick="saveIncome()" class="w-full bg-green-600 text-white py-4 rounded-2xl font-black uppercase shadow-lg">Confirmar</button>
-                    <button onclick="showView('dashboard')" class="w-full text-slate-400 font-black text-[10px] uppercase">Cancelar</button>
-                </div>
-            </section>
+    <h2 class="text-lg font-black text-green-600 uppercase italic">Nuevo Ingreso</h2>
+    <div class="space-y-4">
+        <input type="number" id="in-amount" class="w-full p-4 bg-slate-50 rounded-2xl font-black text-xl outline-none" placeholder="Monto Lps">
+        
+        <select id="in-unit" class="w-full p-4 bg-slate-50 rounded-2xl font-bold text-sm outline-none">
+            </select>
+
+        <select id="in-category" class="w-full p-4 bg-slate-50 rounded-2xl font-bold text-sm outline-none">
+            </select>
+
+        <button onclick="saveIncome()" class="w-full bg-green-600 text-white py-4 rounded-2xl font-black uppercase shadow-lg">Confirmar</button>
+        <button onclick="showView('dashboard')" class="w-full text-slate-400 font-black text-[10px] uppercase">Cancelar</button>
+    </div>
+</section>
 
             <section id="view-expense" class="hidden bg-white p-6 rounded-[3rem] shadow-2xl space-y-6">
     <h2 class="text-lg font-black text-red-600 uppercase italic">Registro de Gastos</h2>
@@ -126,6 +113,7 @@
         <span id="breakdown-icon" class="text-blue-500">⏱️</span>
         <h3 id="breakdown-title" class="text-[10px] font-black uppercase text-slate-400 tracking-widest italic">Distribución</h3>
     </div>
+      
     <div id="lista-breakdown" class="space-y-4"></div>
 </div>
 
@@ -143,7 +131,14 @@
                         <button onclick="addUnit()" class="bg-blue-600 text-white p-3 rounded-xl active:scale-90">+</button>
                     </div>
                 </div>
-
+<div class="bg-white p-6 rounded-[2.5rem] shadow-xl border border-slate-100 space-y-4">
+    <h3 class="text-[10px] font-black uppercase text-slate-800 tracking-widest italic">Categorías de Ingresos</h3>
+    <div id="lista-cat-ingresos-ajustes" class="space-y-2 text-slate-600"></div>
+    <div class="flex gap-2 mt-4">
+        <input type="text" id="new-cat-in-input" class="flex-1 bg-slate-100 p-3 rounded-xl text-xs font-bold uppercase outline-none" placeholder="Nueva categoría...">
+        <button onclick="addCatIngreso()" class="bg-blue-600 text-white p-3 rounded-xl active:scale-90">+</button>
+    </div>
+</div>
                 <div class="bg-white p-6 rounded-[2.5rem] shadow-xl border border-slate-100 space-y-4">
                     <h3 class="text-[10px] font-black uppercase text-slate-800 tracking-widest italic">Categorías de Gastos</h3>
                     <div id="lista-categorias-ajustes" class="space-y-2 text-slate-600"></div>
@@ -156,25 +151,28 @@
 
         </main>
       
-<div id="modal-edit" class="hidden fixed inset-0 z-[100] flex items-end justify-center bg-slate-900/50 backdrop-blur-sm">
-    <div class="bg-white w-full max-w-md p-8 rounded-t-[3rem] shadow-2xl space-y-6 animate-slide-up">
+<div id="modal-edit" class="hidden fixed inset-0 z-[100] flex items-end justify-center bg-slate-900/60 backdrop-blur-sm p-4">
+    <div class="bg-white w-full max-w-md p-8 rounded-t-[3rem] shadow-2xl space-y-6 animate-slide-up overflow-y-auto max-h-[90vh]">
+        
         <div class="flex justify-between items-center">
             <h2 id="edit-title" class="text-lg font-black text-blue-600 uppercase italic">Editar Registro</h2>
-            <button onclick="closeEditModal()" class="text-slate-300 font-black">CERRAR</button>
+            <button onclick="closeEditModal()" class="text-slate-300 font-black text-[10px] uppercase">Cerrar</button>
         </div>
         
         <div class="space-y-4">
-            <input type="hidden" id="edit-id"> <p class="text-[10px] font-black uppercase text-slate-400 ml-2">Monto Lps</p>
-            <input type="number" id="edit-amount" class="w-full p-4 bg-slate-50 rounded-2xl font-black text-xl outline-none" placeholder="0.00">
-            
-            <p class="text-[10px] font-black uppercase text-slate-400 ml-2">Unidad</p>
-            <select id="edit-unit" class="w-full p-4 bg-slate-50 rounded-2xl font-bold text-sm outline-none"></select>
-            
-            <p class="text-[10px] font-black uppercase text-slate-400 ml-2">Categoría / Detalle</p>
-            <div id="edit-cat-container">
+            <input type="hidden" id="edit-id">
+
+            <div>
+                <p class="text-[10px] font-black uppercase text-slate-400 ml-2 mb-1">Unidad / Vehículo</p>
+                <select id="edit-unit" class="w-full p-4 bg-slate-50 rounded-2xl font-bold text-sm outline-none border-none focus:ring-2 focus:ring-blue-500"></select>
+            </div>
+
+            <div id="edit-cat-container" class="space-y-4">
                 </div>
 
-            <button onclick="updateTransactionFirebase()" class="w-full bg-blue-600 text-white py-4 rounded-2xl font-black uppercase shadow-lg active:scale-95 transition-all">Guardar Cambios</button>
+            <button onclick="updateTransactionFirebase()" class="w-full bg-blue-600 text-white py-4 rounded-2xl font-black uppercase shadow-lg active:scale-95 transition-all mt-4">
+                Guardar Cambios
+            </button>
         </div>
     </div>
 </div>
@@ -211,6 +209,6 @@
 </nav>
     </div>
 
-    <script type="module" src="turismo.js"></script>
+    <script type="module" src="contratos.js"></script>
 </body>
 </html>
