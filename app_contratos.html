@@ -74,16 +74,20 @@
 </section>
 
             <section id="view-income" class="hidden bg-white p-8 rounded-[3rem] shadow-2xl space-y-6">
-                <h2 class="text-lg font-black text-green-600 uppercase italic">Nuevo Ingreso</h2>
-                <div class="space-y-4">
-                    <input type="number" id="in-amount" class="w-full p-4 bg-slate-50 rounded-2xl font-black text-xl outline-none" placeholder="Monto Lps">
-                    <select id="in-unit" class="w-full p-4 bg-slate-50 rounded-2xl font-bold text-sm outline-none">
-                        </select>
-                    <textarea id="in-detail" class="w-full p-4 bg-slate-50 rounded-2xl text-sm h-24 outline-none" placeholder="Detalle del viaje..."></textarea>
-                    <button onclick="saveIncome()" class="w-full bg-green-600 text-white py-4 rounded-2xl font-black uppercase shadow-lg">Confirmar</button>
-                    <button onclick="showView('dashboard')" class="w-full text-slate-400 font-black text-[10px] uppercase">Cancelar</button>
-                </div>
-            </section>
+    <h2 class="text-lg font-black text-green-600 uppercase italic">Nuevo Ingreso</h2>
+    <div class="space-y-4">
+        <input type="number" id="in-amount" class="w-full p-4 bg-slate-50 rounded-2xl font-black text-xl outline-none" placeholder="Monto Lps">
+        
+        <select id="in-unit" class="w-full p-4 bg-slate-50 rounded-2xl font-bold text-sm outline-none">
+            </select>
+
+        <select id="in-category" class="w-full p-4 bg-slate-50 rounded-2xl font-bold text-sm outline-none">
+            </select>
+
+        <button onclick="saveIncome()" class="w-full bg-green-600 text-white py-4 rounded-2xl font-black uppercase shadow-lg">Confirmar</button>
+        <button onclick="showView('dashboard')" class="w-full text-slate-400 font-black text-[10px] uppercase">Cancelar</button>
+    </div>
+</section>
 
             <section id="view-expense" class="hidden bg-white p-6 rounded-[3rem] shadow-2xl space-y-6">
     <h2 class="text-lg font-black text-red-600 uppercase italic">Registro de Gastos</h2>
@@ -125,6 +129,7 @@
         <span id="breakdown-icon" class="text-blue-500">⏱️</span>
         <h3 id="breakdown-title" class="text-[10px] font-black uppercase text-slate-400 tracking-widest italic">Distribución</h3>
     </div>
+      
     <div id="lista-breakdown" class="space-y-4"></div>
 </div>
 
@@ -142,7 +147,14 @@
                         <button onclick="addUnit()" class="bg-blue-600 text-white p-3 rounded-xl active:scale-90">+</button>
                     </div>
                 </div>
-
+<div class="bg-white p-6 rounded-[2.5rem] shadow-xl border border-slate-100 space-y-4">
+    <h3 class="text-[10px] font-black uppercase text-slate-800 tracking-widest italic">Categorías de Ingresos</h3>
+    <div id="lista-cat-ingresos-ajustes" class="space-y-2 text-slate-600"></div>
+    <div class="flex gap-2 mt-4">
+        <input type="text" id="new-cat-in-input" class="flex-1 bg-slate-100 p-3 rounded-xl text-xs font-bold uppercase outline-none" placeholder="Nueva categoría...">
+        <button onclick="addCatIngreso()" class="bg-blue-600 text-white p-3 rounded-xl active:scale-90">+</button>
+    </div>
+</div>
                 <div class="bg-white p-6 rounded-[2.5rem] shadow-xl border border-slate-100 space-y-4">
                     <h3 class="text-[10px] font-black uppercase text-slate-800 tracking-widest italic">Categorías de Gastos</h3>
                     <div id="lista-categorias-ajustes" class="space-y-2 text-slate-600"></div>
@@ -155,25 +167,28 @@
 
         </main>
       
-<div id="modal-edit" class="hidden fixed inset-0 z-[100] flex items-end justify-center bg-slate-900/50 backdrop-blur-sm">
-    <div class="bg-white w-full max-w-md p-8 rounded-t-[3rem] shadow-2xl space-y-6 animate-slide-up">
+<div id="modal-edit" class="hidden fixed inset-0 z-[100] flex items-end justify-center bg-slate-900/60 backdrop-blur-sm p-4">
+    <div class="bg-white w-full max-w-md p-8 rounded-t-[3rem] shadow-2xl space-y-6 animate-slide-up overflow-y-auto max-h-[90vh]">
+        
         <div class="flex justify-between items-center">
             <h2 id="edit-title" class="text-lg font-black text-blue-600 uppercase italic">Editar Registro</h2>
-            <button onclick="closeEditModal()" class="text-slate-300 font-black">CERRAR</button>
+            <button onclick="closeEditModal()" class="text-slate-300 font-black text-[10px] uppercase">Cerrar</button>
         </div>
         
         <div class="space-y-4">
-            <input type="hidden" id="edit-id"> <p class="text-[10px] font-black uppercase text-slate-400 ml-2">Monto Lps</p>
-            <input type="number" id="edit-amount" class="w-full p-4 bg-slate-50 rounded-2xl font-black text-xl outline-none" placeholder="0.00">
-            
-            <p class="text-[10px] font-black uppercase text-slate-400 ml-2">Unidad</p>
-            <select id="edit-unit" class="w-full p-4 bg-slate-50 rounded-2xl font-bold text-sm outline-none"></select>
-            
-            <p class="text-[10px] font-black uppercase text-slate-400 ml-2">Categoría / Detalle</p>
-            <div id="edit-cat-container">
+            <input type="hidden" id="edit-id">
+
+            <div>
+                <p class="text-[10px] font-black uppercase text-slate-400 ml-2 mb-1">Unidad / Vehículo</p>
+                <select id="edit-unit" class="w-full p-4 bg-slate-50 rounded-2xl font-bold text-sm outline-none border-none focus:ring-2 focus:ring-blue-500"></select>
+            </div>
+
+            <div id="edit-cat-container" class="space-y-4">
                 </div>
 
-            <button onclick="updateTransactionFirebase()" class="w-full bg-blue-600 text-white py-4 rounded-2xl font-black uppercase shadow-lg active:scale-95 transition-all">Guardar Cambios</button>
+            <button onclick="updateTransactionFirebase()" class="w-full bg-blue-600 text-white py-4 rounded-2xl font-black uppercase shadow-lg active:scale-95 transition-all mt-4">
+                Guardar Cambios
+            </button>
         </div>
     </div>
 </div>
